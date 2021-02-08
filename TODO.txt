@@ -1,0 +1,15 @@
+add to db Model && user Context >>
+                        . Default User information {name, plan status, email, country, addresss, postal code}
+                        . Settings {Language, Notifications, data and network usage, Permissions, }
+                        . Billing {card, transactions}
+add to Server && dispatch >>
+                        . Reset Password
+add to Server && Front >>
+                        . Stigma
+                        .Payment
+                        >subscribition
+.Permissions()
+.New Chat()
+.New Blog()
+.(optional) notifications
+.(optional) Daily Pictures
