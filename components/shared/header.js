@@ -6,6 +6,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Image,
+  Dimensions,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Menu from "./assets/modal";
@@ -14,6 +15,9 @@ import { userContext } from "../../store/contextApi";
 
 const image = require("../../assets/bg2.jpg");
 const dots = require("../../assets/dot.png");
+
+const height = Dimensions.get("screen").height;
+const width = Dimensions.get("screen").width;
 
 const header = () => {
   const navigation = useNavigation();
@@ -24,43 +28,55 @@ const header = () => {
   return (
     <View style={styles.container}>
       <ImageBackground source={image} style={styles.image}>
-        <Menu vis={menuVisible} setVis={setMenuVisible} nav={navigation} />
-        <View style={styles.menuWrapper}>
-          <View style={{}}>
-            <Image source={dots} style={{ marginBottom: 10 }} />
-            <Text style={{ color: "white", fontSize: 12, fontWeight: "bold" }}>
-              Mount Ushba
-            </Text>
-            <Text style={{ color: "white", fontSize: 12, fontWeight: "200" }}>
-              Georgia
-            </Text>
+        <View
+          style={{
+            padding: 16,
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "flex-end",
+            height: "100%",
+          }}
+        >
+          <View style={styles.profileContainer}>
+            <View style={styles.profilePicture}>
+              <Image
+                source={{
+                  uri: profilePicture,
+                }}
+                style={{ flex: 1, width: null, height: null }}
+              />
+            </View>
+            <View style={styles.profileText}>
+              <Text style={{ color: "white", fontSize: 12, fontWeight: "200" }}>
+                Hello {name}
+              </Text>
+              <Text
+                style={{ color: "white", fontSize: 16, fontWeight: "bold" }}
+              >
+                What Are You Looking For?
+              </Text>
+            </View>
           </View>
-
+          <Menu
+            vis={menuVisible}
+            setVis={setMenuVisible}
+            nav={navigation}
+            height={height}
+          />
           <TouchableOpacity
+            style={{
+              height: height * 0.18 * 0.48,
+              flexDirection: "row",
+            }}
             onPress={() => {
               setMenuVisible(!menuVisible);
             }}
           >
-            <Image source={require("../../assets/hmb.png")} />
-          </TouchableOpacity>
-        </View>
-        <View style={styles.profileContainer}>
-          <View style={styles.profilePicture}>
             <Image
-              source={{
-                uri: profilePicture,
-              }}
-              style={{ flex: 1, width: null, height: null }}
+              style={{ alignSelf: "center" }}
+              source={require("../../assets/hmb.png")}
             />
-          </View>
-          <View style={styles.profileText}>
-            <Text style={{ color: "white", fontSize: 12, fontWeight: "200" }}>
-              Hello {name}
-            </Text>
-            <Text style={{ color: "white", fontSize: 16, fontWeight: "bold" }}>
-              What Are You Looking For?
-            </Text>
-          </View>
+          </TouchableOpacity>
         </View>
       </ImageBackground>
     </View>
@@ -70,10 +86,10 @@ const header = () => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: "column",
-    height: 200,
+    height: height * 0.18,
   },
   image: {
-    height: 435,
+    height: height * 0.18,
   },
   text: {
     color: "white",
@@ -84,14 +100,14 @@ const styles = StyleSheet.create({
   profileContainer: {
     flex: 1,
     flexDirection: "row",
-    position: "absolute",
-    top: 140,
-    left: 25,
+    // position: "absolute",
+    // top: 100,
+    // left: 25,
   },
   profilePicture: {
     marginRight: 10,
-    height: 50,
-    width: 50,
+    height: height * 0.18 * 0.48,
+    width: height * 0.18 * 0.48,
     borderRadius: 60,
     borderColor: "white",
     borderWidth: 2,
@@ -107,7 +123,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     justifyContent: "space-between",
-    top: 30,
+    top: 20,
     padding: 25,
   },
 });

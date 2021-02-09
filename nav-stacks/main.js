@@ -1,37 +1,34 @@
 import React from "react";
-import { ActivityIndicator, View } from "react-native";
-import { useQuery, useQueryClient } from "react-query";
-import axios from "axios";
 
 import { createStackNavigator } from "@react-navigation/stack";
+
 const Stack = createStackNavigator();
 
-import mainScreen from "../components/main/mainScreen";
+import profileStack from "./profile";
+import blogScreen from "../components/blog/blogScreen";
+import chatScreen from "../components/chat/chatScreen";
+
+import TabNavigation from "../components/shared/btn-component/botTabNavigator";
 
 function auth() {
-  const fetchInitialData = async (key) => {
-    const { data } = await axios.get(
-      `http://localhost:8081/api/get_initial/Test01`
-    );
-    return data;
-  };
-
   return (
-    <>
-      {/* {isSuccess ? ( */}
-      {/* <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <ActivityIndicator size="large" />
-      </View> */}
-      <Stack.Navigator initialRouteName="Main">
-        <Stack.Screen
-          name="Main"
-          component={mainScreen}
-          options={{ headerShown: false }}
-        />
-      </Stack.Navigator>
-      {/* ) : isLoading ? ( */}
-      {/* ) : null} */}
-    </>
+    <Stack.Navigator initialRouteName="Blog">
+      <Stack.Screen
+        name="Blog"
+        component={blogScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Chat"
+        component={chatScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Profile"
+        component={profileStack}
+        options={{ headerShown: false }}
+      />
+    </Stack.Navigator>
   );
 }
 

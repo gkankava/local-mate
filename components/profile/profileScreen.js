@@ -1,32 +1,24 @@
 import React from "react";
 import { View, Text, Image } from "react-native";
+import TabNavigation from "../shared/btn-component/botTabNavigator";
+
+import Header from "../shared/header";
 
 function profileScreen() {
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "flex-start",
-        alignItems: "center",
-        paddingTop: 140,
-      }}
-    >
-      <View>
-        <Text>profile screen </Text>
-        {/* <View
-          style={{
-            position: "absolute",
-            bottom: 0,
-            left: 0,
-            height: 90,
-            width: "100%",
-            backgroundColor: "red",
-          }}
-        >
-          <Image source={require("../../assets/svg/bot.png")} />
-        </View> */}
+    <>
+      <Header />
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Text>Profile screen </Text>
+        <TabNavigation />
       </View>
-    </View>
+    </>
   );
 }
 

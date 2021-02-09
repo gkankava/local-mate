@@ -23,6 +23,7 @@ import Camera from "./camera";
 import { Audio } from "expo-av";
 
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import Header from "../shared/header";
 
 const ENDPOINT = env.manifest.extra.proxy;
 let socket;
@@ -79,7 +80,7 @@ function chatScreen() {
       setMedia();
       setUploadedMedia();
 
-      socket.emit("disconnect");
+      socket.emit("disconnectRes");
       socket.off();
     };
   }, []);
@@ -243,6 +244,7 @@ function chatScreen() {
 
   return (
     <>
+      <Header />
       <ScrollView
         style={styles.chatArea}
         ref={scrollViewRef}
@@ -251,6 +253,7 @@ function chatScreen() {
             ? scrollViewRef.current.scrollToEnd({ animated: true })
             : null
         }
+        contentContainerStyle={{ paddingBottom: 15 }}
       >
         <Messages
           messagelist={messages}
@@ -402,7 +405,11 @@ function chatScreen() {
 }
 
 const styles = StyleSheet.create({
-  chatArea: { flex: 1, padding: 15, backgroundColor: "white" },
+  chatArea: {
+    flex: 1,
+    padding: 15,
+    backgroundColor: "white",
+  },
   inputArea: {
     paddingLeft: 15,
     paddingRight: 15,
