@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   Keyboard,
 } from "react-native";
+import env from "expo-constants";
 
 import localStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
@@ -85,7 +86,10 @@ function signUpScreen({ navigation }) {
       dispatchSignUp({ type: "signUp" });
 
       axios
-        .post("http://localhost:8081/api/auth/signup", { phone, password })
+        .post(`${env.manifest.extra.proxy}/api/auth/signup`, {
+          phone,
+          password,
+        })
         .then((res) => {
           dispatchSignUp({ type: "success" });
           storeToken(res.data.token);

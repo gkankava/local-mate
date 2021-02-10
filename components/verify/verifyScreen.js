@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   Keyboard,
 } from "react-native";
+import env from "expo-constants";
 
 import axios from "axios";
 
@@ -30,7 +31,7 @@ function verifyScreen() {
     console.log(phone);
     try {
       await axios
-        .post(`http://localhost:8081/api/auth/verification/${phone}`)
+        .post(`${env.manifest.extra.proxy}/api/auth/verification/${phone}`)
         .then((res) => {
           console.log(res);
         });
@@ -88,7 +89,10 @@ function verifyScreen() {
   const handleSubmit = () => {
     if (code.length === 4) {
       axios
-        .post(`http://localhost:8081/api/auth/confirmation`, { phone, code })
+        .post(`${env.manifest.extra.proxy}/api/auth/confirmation`, {
+          phone,
+          code,
+        })
         .then((res) => {
           setData(res.data);
           setIsSuccess(true);
