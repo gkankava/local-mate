@@ -5,7 +5,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 const Stack = createStackNavigator();
 
 import profileStack from "./profile";
-import blogScreen from "../components/blog/blogScreen";
+import blogStack from "./blog";
 import chatScreen from "../components/chat/chatScreen";
 
 import TabNavigation from "../components/shared/btn-component/botTabNavigator";
@@ -15,7 +15,7 @@ function auth() {
     <Stack.Navigator initialRouteName="Blog">
       <Stack.Screen
         name="Blog"
-        component={blogScreen}
+        component={blogStack}
         options={{ headerShown: false }}
       />
       <Stack.Screen
