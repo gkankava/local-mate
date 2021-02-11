@@ -14,6 +14,7 @@ import Categories from "./components/categories";
 import CategoriesPosts from "./components/categoriesPosts";
 import Popular from "./components/popular";
 import Recents from "./components/recents";
+import { ScrollView } from "react-native-gesture-handler";
 
 const height = Dimensions.get("screen").height;
 const width = Dimensions.get("screen").width;
@@ -22,6 +23,7 @@ function blogScreen({ navigation }) {
   const [categories, setCategories] = useState([]);
   const [selectedCategory, selectCategory] = useState();
   const [fetchedPosts, setFetchedPosts] = useState([]);
+  const [dummy, setDummy] = useState([]);
 
   //fetch categories
   useEffect(() => {
@@ -51,15 +53,22 @@ function blogScreen({ navigation }) {
     }
   }, [selectedCategory]);
 
+  useEffect(() => {
+    axios
+      .get(`${env.manifest.extra.proxy}/api/dummy`)
+      .then((res) => setDummy(res.data))
+      .catch((err) => console.log(err));
+  }, []);
+
   return (
     <>
       <Header />
-      <View
+      <ScrollView
         style={{
           flex: 1,
-          alignItems: "center",
           backgroundColor: "white",
         }}
+        contentContainerStyle={{ paddingBottom: 150 }}
       >
         <Search />
         {categories.length > 0 && selectedCategory ? (
@@ -85,10 +94,22 @@ function blogScreen({ navigation }) {
             <DotIndicator color="#85C8D5" size={7} />
           </View>
         )}
-        <Popular />
-        <Recents />
-        <TabNavigation />
-      </View>
+        {dummy ? (
+          <Popular data={dummy} />
+        ) : (
+          <View style={styles.catPostsContainer}>
+            <DotIndicator color="#85C8D5" size={7} />
+          </View>
+        )}
+        {dummy ? (
+          <Recents data={dummy} />
+        ) : (
+          <View style={styles.catPostsContainer}>
+            <DotIndicator color="#85C8D5" size={7} />
+          </View>
+        )}
+      </ScrollView>
+      <TabNavigation />
     </>
   );
 }
