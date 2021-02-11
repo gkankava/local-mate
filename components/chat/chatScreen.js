@@ -258,7 +258,7 @@ function chatScreen() {
         <Messages
           messagelist={messages}
           name={user.user.name || user.user.phone}
-          pP={user.user.profilePicture}
+          pP={ENDPOINT + user.user.profilePicture}
         />
       </ScrollView>
       <View style={styles.inputArea}>

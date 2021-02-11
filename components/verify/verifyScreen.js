@@ -28,12 +28,12 @@ function verifyScreen() {
   const [data, setData] = useState();
 
   const verification = async () => {
-    console.log(phone);
+    console.log(phone + "verifying");
     try {
       await axios
         .post(`${env.manifest.extra.proxy}/api/auth/verification/${phone}`)
         .then((res) => {
-          console.log(res);
+          // console.log(res);
         });
     } catch (error) {
       console.log("error here", error);
@@ -94,6 +94,7 @@ function verifyScreen() {
           code,
         })
         .then((res) => {
+          console.log(res.data);
           setData(res.data);
           setIsSuccess(true);
         })

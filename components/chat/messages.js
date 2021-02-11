@@ -56,7 +56,6 @@ const messages = ({ messagelist, name, pP, urgent }) => {
           </TouchableOpacity>
           <Image
             source={{ uri: imgModal.img }}
-            source={{ uri: imgModal.img }}
             style={{
               //   position: "absolute",
               //   top: 0,

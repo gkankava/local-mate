@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Menu from "./assets/modal";
+import env from "expo-constants";
 
 import { userContext } from "../../store/contextApi";
 
@@ -24,6 +25,8 @@ const header = () => {
   const [menuVisible, setMenuVisible] = React.useState(false);
 
   const { name, profilePicture } = useContext(userContext).user;
+
+  let pp = env.manifest.extra.proxy + profilePicture;
 
   return (
     <View style={styles.container}>
@@ -41,7 +44,7 @@ const header = () => {
             <View style={styles.profilePicture}>
               <Image
                 source={{
-                  uri: profilePicture,
+                  uri: pp,
                 }}
                 style={{ flex: 1, width: null, height: null }}
               />
