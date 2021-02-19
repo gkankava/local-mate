@@ -29,7 +29,6 @@ export function loginReducer(state, action) {
         ...state,
         isLoading: true,
         isError: false,
-
         error: "",
       };
     case "success":
