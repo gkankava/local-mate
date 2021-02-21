@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, Dimensions } from "react-native";
+import { View, Text, StyleSheet, Dimensions, ScrollView } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import axios from "axios";
 import env from "expo-constants";
@@ -14,7 +14,6 @@ import Categories from "./components/categories";
 import CategoriesPosts from "./components/categoriesPosts";
 import Popular from "./components/popular";
 import Recents from "./components/recents";
-import { ScrollView } from "react-native-gesture-handler";
 
 const height = Dimensions.get("screen").height;
 const width = Dimensions.get("screen").width;
@@ -60,55 +59,56 @@ function blogScreen({ navigation }) {
       .catch((err) => console.log(err));
   }, []);
 
+  const renderContent = () => (
+    // <ScrollView
+    //   style={{
+    //     flex: 1,
+    //     backgroundColor: "white",
+    //   }}
+    // >
+    <>
+      <Search />
+      {categories.length > 0 && selectedCategory ? (
+        <Categories
+          categories={categories}
+          selectedCategory={selectedCategory}
+          selectCategory={selectCategory}
+          setFetchedPosts={setFetchedPosts}
+        />
+      ) : (
+        <View style={styles.categoryTabContainer}>
+          <DotIndicator color="#85C8D5" size={5} />
+        </View>
+      )}
+
+      {fetchedPosts.length > 0 ? (
+        <CategoriesPosts fetchedPosts={fetchedPosts} navigation={navigation} />
+      ) : (
+        <View style={styles.catPostsContainer}>
+          <DotIndicator color="#85C8D5" size={7} />
+        </View>
+      )}
+      {dummy ? (
+        <Popular data={dummy} />
+      ) : (
+        <View style={styles.catPostsContainer}>
+          <DotIndicator color="#85C8D5" size={7} />
+        </View>
+      )}
+      {dummy ? (
+        <Recents data={dummy} />
+      ) : (
+        <View style={styles.catPostsContainer}>
+          <DotIndicator color="#85C8D5" size={7} />
+        </View>
+      )}
+      {/* </ScrollView> */}
+    </>
+  );
+
   return (
     <>
-      <Header />
-      <ScrollView
-        style={{
-          flex: 1,
-          backgroundColor: "white",
-        }}
-        contentContainerStyle={{ paddingBottom: 150 }}
-      >
-        <Search />
-        {categories.length > 0 && selectedCategory ? (
-          <Categories
-            categories={categories}
-            selectedCategory={selectedCategory}
-            selectCategory={selectCategory}
-            setFetchedPosts={setFetchedPosts}
-          />
-        ) : (
-          <View style={styles.categoryTabContainer}>
-            <DotIndicator color="#85C8D5" size={5} />
-          </View>
-        )}
-
-        {fetchedPosts.length > 0 ? (
-          <CategoriesPosts
-            fetchedPosts={fetchedPosts}
-            navigation={navigation}
-          />
-        ) : (
-          <View style={styles.catPostsContainer}>
-            <DotIndicator color="#85C8D5" size={7} />
-          </View>
-        )}
-        {dummy ? (
-          <Popular data={dummy} />
-        ) : (
-          <View style={styles.catPostsContainer}>
-            <DotIndicator color="#85C8D5" size={7} />
-          </View>
-        )}
-        {dummy ? (
-          <Recents data={dummy} />
-        ) : (
-          <View style={styles.catPostsContainer}>
-            <DotIndicator color="#85C8D5" size={7} />
-          </View>
-        )}
-      </ScrollView>
+      <Header>{renderContent()}</Header>
       <TabNavigation />
     </>
   );

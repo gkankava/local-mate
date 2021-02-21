@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import {
   View,
   Text,
@@ -7,92 +7,211 @@ import {
   TouchableOpacity,
   Image,
   Dimensions,
+  Animated,
 } from "react-native";
+
 import { useNavigation } from "@react-navigation/native";
 import Menu from "./assets/modal";
 import env from "expo-constants";
 
 import { userContext } from "../../store/contextApi";
+import { ScrollView } from "react-native-gesture-handler";
 
 const image = require("../../assets/bg2.jpg");
 const dots = require("../../assets/dot.png");
 
 const height = Dimensions.get("screen").height;
 const width = Dimensions.get("screen").width;
+const BANNER_H = 350;
+import DummyText from "./dummytext";
 
-const header = () => {
+const header = (props) => {
   const navigation = useNavigation();
-  const [menuVisible, setMenuVisible] = React.useState(false);
+  const [menuVisible, setMenuVisible] = useState(false);
+  const [scrollPos, setScrollPos] = useState(0);
+
+  // console.log(scrollPos);
 
   const { name, profilePicture } = useContext(userContext).user;
-
   let pp = env.manifest.extra.proxy + profilePicture;
 
+  const scrollY = useRef(new Animated.Value(0)).current;
+
   return (
-    <View style={styles.container}>
-      <ImageBackground source={image} style={styles.image}>
-        <View
-          style={{
-            padding: 16,
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "flex-end",
-            height: "100%",
-          }}
-        >
-          <View style={styles.profileContainer}>
-            <View style={styles.profilePicture}>
-              <Image
-                source={{
-                  uri: pp,
-                }}
-                style={{ flex: 1, width: null, height: null }}
-              />
-            </View>
-            <View style={styles.profileText}>
-              <Text style={{ color: "white", fontSize: 12, fontWeight: "200" }}>
-                Hello {name}
-              </Text>
-              <Text
-                style={{ color: "white", fontSize: 16, fontWeight: "bold" }}
-              >
-                What Are You Looking For?
-              </Text>
-            </View>
-          </View>
-          <Menu
-            vis={menuVisible}
-            setVis={setMenuVisible}
-            nav={navigation}
-            height={height}
-          />
-          <TouchableOpacity
+    <View>
+      <View>
+        <ImageBackground source={image} style={styles.header}>
+          <View
             style={{
-              height: height * 0.18 * 0.48,
-              flexDirection: "row",
-            }}
-            onPress={() => {
-              setMenuVisible(!menuVisible);
+              padding: 15,
+              flexDirection: "column",
+              justifyContent: "space-between",
+              height: "100%",
+              paddingBottom: 65,
+              paddingTop: 55,
             }}
           >
-            <Image
-              style={{ alignSelf: "center" }}
-              source={require("../../assets/hmb.png")}
-            />
-          </TouchableOpacity>
-        </View>
-      </ImageBackground>
+            {/* top header */}
+            <View
+              style={{ flexDirection: "row", justifyContent: "space-between" }}
+            >
+              <View
+                style={{
+                  ...styles.profileContainer,
+                  display: scrollPos >= 100 ? "flex" : "none",
+                }}
+              >
+                <View style={styles.profilePicture}>
+                  <Image
+                    source={{
+                      uri: pp,
+                    }}
+                    style={{ flex: 1, width: null, height: null }}
+                  />
+                </View>
+                <View style={styles.profileText}>
+                  <Text
+                    style={{ color: "white", fontSize: 12, fontWeight: "200" }}
+                  >
+                    Hello {name}
+                  </Text>
+                  <Text
+                    style={{ color: "white", fontSize: 16, fontWeight: "bold" }}
+                  >
+                    What Are You Looking For?
+                  </Text>
+                </View>
+              </View>
+              <View
+                style={{
+                  alignItems: "flex-start",
+                  justifyContent: "flex-start",
+                  opacity: scrollPos < 100 ? (100 - scrollPos) / 100 : 1,
+                  display: scrollPos < 100 ? "flex" : "none",
+                }}
+              >
+                <Image
+                  source={require("../../assets/dot.png")}
+                  style={{ marginBottom: 10 }}
+                />
+                <Text
+                  style={{ color: "white", fontSize: 12, fontWeight: "bold" }}
+                >
+                  Mount Ushba
+                </Text>
+                <Text
+                  style={{
+                    color: "white",
+                    fontSize: 12,
+                    fontWeight: "200",
+                  }}
+                >
+                  Georgia
+                </Text>
+              </View>
+              <Menu
+                vis={menuVisible}
+                setVis={setMenuVisible}
+                nav={navigation}
+                height={height}
+              />
+              <TouchableOpacity
+                style={{
+                  height: height * 0.18 * 0.48,
+                  flexDirection: "row",
+                }}
+                onPress={() => {
+                  setMenuVisible(!menuVisible);
+                }}
+              >
+                <Image
+                  style={{ alignSelf: "center" }}
+                  source={require("../../assets/hmb.png")}
+                />
+              </TouchableOpacity>
+            </View>
+            {/* profile container */}
+            <View
+              style={{
+                ...styles.profileContainer,
+                opacity: scrollPos < 100 ? (100 - scrollPos) / 100 : 1,
+                display: scrollPos >= 100 ? "none" : "flex",
+              }}
+            >
+              <View style={styles.profilePicture}>
+                <Image
+                  source={{
+                    uri: pp,
+                  }}
+                  style={{ flex: 1, width: null, height: null }}
+                />
+              </View>
+              <View style={styles.profileText}>
+                <Text
+                  style={{ color: "white", fontSize: 12, fontWeight: "200" }}
+                >
+                  Hello {name}
+                </Text>
+                <Text
+                  style={{ color: "white", fontSize: 16, fontWeight: "bold" }}
+                >
+                  What Are You Looking For?
+                </Text>
+              </View>
+            </View>
+          </View>
+        </ImageBackground>
+      </View>
+      <ScrollView
+        onScroll={(e) => {
+          setScrollPos(Math.floor(e.nativeEvent.contentOffset.y));
+          // Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], {
+          //   useNativeDriver: true,
+          // });
+          Animated.event(
+            // scrollX = e.nativeEvent.contentOffset.x
+            [
+              {
+                nativeEvent: {
+                  contentOffset: {
+                    y: scrollY,
+                  },
+                },
+              },
+            ],
+            { useNativeDriver: true }
+          );
+        }}
+        scrollEventThrottle={16}
+        style={{
+          borderTopRightRadius: 50,
+          backgroundColor: "white",
+          // marginTop: -50,
+          marginTop:
+            scrollPos >= 0 && scrollPos < 150
+              ? -50 - scrollPos
+              : scrollPos < 0
+              ? -50
+              : -200,
+          paddingTop:
+            scrollPos >= 0 && scrollPos < 150
+              ? scrollPos
+              : scrollPos < 0
+              ? 0
+              : 150,
+        }}
+        contentContainerStyle={{ paddingBottom: 450 }}
+      >
+        {props.children ? props.children : null}
+      </ScrollView>
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: "column",
-    height: height * 0.18,
-  },
-  image: {
-    height: height * 0.18,
+const styles = {
+  header: {
+    height: BANNER_H,
+    width: "100%",
   },
   text: {
     color: "white",
@@ -101,11 +220,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   profileContainer: {
-    flex: 1,
     flexDirection: "row",
-    // position: "absolute",
-    // top: 100,
-    // left: 25,
   },
   profilePicture: {
     marginRight: 10,
@@ -117,10 +232,8 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   profileText: {
-    flex: 1,
     flexDirection: "column",
-    alignSelf: "flex-end",
-    marginBottom: 17.5,
+    alignSelf: "center",
   },
   menuWrapper: {
     flex: 1,
@@ -129,6 +242,6 @@ const styles = StyleSheet.create({
     top: 20,
     padding: 25,
   },
-});
+};
 
 export default header;
