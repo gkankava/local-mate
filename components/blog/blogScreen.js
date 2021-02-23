@@ -60,12 +60,6 @@ function blogScreen({ navigation }) {
   }, []);
 
   const renderContent = () => (
-    // <ScrollView
-    //   style={{
-    //     flex: 1,
-    //     backgroundColor: "white",
-    //   }}
-    // >
     <>
       <Search />
       {categories.length > 0 && selectedCategory ? (
@@ -102,7 +96,6 @@ function blogScreen({ navigation }) {
           <DotIndicator color="#85C8D5" size={7} />
         </View>
       )}
-      {/* </ScrollView> */}
     </>
   );
 

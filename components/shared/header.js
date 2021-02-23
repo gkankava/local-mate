@@ -66,17 +66,29 @@ const header = (props) => {
                     source={{
                       uri: pp,
                     }}
-                    style={{ flex: 1, width: null, height: null }}
+                    style={{
+                      flex: 1,
+                      width: null,
+                      height: null,
+                    }}
                   />
                 </View>
                 <View style={styles.profileText}>
                   <Text
-                    style={{ color: "white", fontSize: 12, fontWeight: "200" }}
+                    style={{
+                      color: "white",
+                      fontSize: 12,
+                      fontWeight: "200",
+                    }}
                   >
                     Hello {name}
                   </Text>
                   <Text
-                    style={{ color: "white", fontSize: 16, fontWeight: "bold" }}
+                    style={{
+                      color: "white",
+                      fontSize: 16,
+                      fontWeight: "bold",
+                    }}
                   >
                     What Are You Looking For?
                   </Text>
@@ -162,6 +174,7 @@ const header = (props) => {
           </View>
         </ImageBackground>
       </View>
+      {/* <View style={{}}> */}
       <ScrollView
         onScroll={(e) => {
           setScrollPos(Math.floor(e.nativeEvent.contentOffset.y));
@@ -186,7 +199,6 @@ const header = (props) => {
         style={{
           borderTopRightRadius: 50,
           backgroundColor: "white",
-          // marginTop: -50,
           marginTop:
             scrollPos >= 0 && scrollPos < 150
               ? -50 - scrollPos
@@ -200,10 +212,11 @@ const header = (props) => {
               ? 0
               : 150,
         }}
-        contentContainerStyle={{ paddingBottom: 450 }}
+        contentContainerStyle={{ paddingBottom: 650 }}
       >
         {props.children ? props.children : null}
       </ScrollView>
+      {/* </View> */}
     </View>
   );
 };
