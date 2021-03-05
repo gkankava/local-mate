@@ -69,8 +69,8 @@ function chatScreen() {
     })();
 
     const { name, room } = {
-      name: user.user.name || user.user.phone,
-      room: `${user.user.phone}-chat-room`,
+      name: user.user.username,
+      room: `${user.user.username}-chat-room`,
     };
     socket = io(ENDPOINT);
     socket.emit("join", { name, room }, (error) => {});
@@ -109,7 +109,6 @@ function chatScreen() {
     //upload media--> send Url, in message, if message is http://proxy/uploads/media then check type of media, display image || video || recording
     if (uploadedMedia) {
       socket.emit("sendMessage", uploadedMedia, () => setUploadedMedia());
-      console.log(uploadedMedia);
     }
   };
 
@@ -257,7 +256,7 @@ function chatScreen() {
       >
         <Messages
           messagelist={messages}
-          name={user.user.name || user.user.phone}
+          name={user.user.name || user.user.username}
           pP={ENDPOINT + user.user.profilePicture}
         />
       </ScrollView>

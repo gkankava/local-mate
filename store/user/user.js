@@ -9,7 +9,7 @@ export const userInitial = {
 
 // Login initial/Reducer
 export const initialLogin = {
-  phone: "",
+  username: "",
   password: "",
   isLoading: false,
   isLoggedIn: false,
@@ -36,7 +36,7 @@ export function loginReducer(state, action) {
         ...state,
         isLoading: false,
         isLoggedIn: true,
-        phone: "",
+        username: "",
         password: "",
       };
     case "error":
@@ -45,7 +45,7 @@ export function loginReducer(state, action) {
         isError: true,
         error: action.message,
         isLoading: false,
-        phone: "",
+        username: "",
         password: "",
       };
     case "removeError":
@@ -61,7 +61,7 @@ export function loginReducer(state, action) {
 
 // Register initial/Reducer
 export const initialSignUp = {
-  phone: "",
+  username: "",
   password: "",
   rePassword: "",
   isLoading: false,
@@ -89,7 +89,7 @@ export function signUpReducer(state, action) {
         ...state,
         isLoading: false,
         isLoggedIn: true,
-        phone: "",
+        username: "",
         password: "",
         rePassword: "",
         isError: false,
@@ -100,7 +100,7 @@ export function signUpReducer(state, action) {
         isError: true,
         error: action.message,
         isLoading: false,
-        phone: "",
+        username: "",
         password: "",
         rePassword: "",
       };

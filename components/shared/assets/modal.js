@@ -1,9 +1,15 @@
 import React from "react";
 import { View, Text, Modal, StyleSheet, Dimensions } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 const height = Dimensions.get("screen").height;
 
-const modal = ({ vis, setVis, nav }) => {
+const modal = ({ vis, setVis }) => {
+  React.useEffect(() => {
+    console.log(vis);
+  }, []);
+  const nav = useNavigation();
+
   return (
     <>
       <Modal
@@ -11,7 +17,7 @@ const modal = ({ vis, setVis, nav }) => {
         transparent={true}
         visible={vis}
         onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
+          setVis(false);
         }}
       >
         <View

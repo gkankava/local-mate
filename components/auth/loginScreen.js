@@ -17,7 +17,7 @@ import localStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { useFocusEffect } from "@react-navigation/native";
 
-import { setUserContext } from "../../store/contextApi";
+import { setUserContext, userContext } from "../../store/contextApi";
 import { setTokenHeader } from "../../store/tokenHeader";
 import { initialLogin, loginReducer } from "../../store/user/user";
 
@@ -26,11 +26,12 @@ import Notify from "../../handlers/errorMessage";
 const passIco = require("../../assets/auth/seeIco.png");
 const passIcoActive = require("../../assets/auth/seeIcoActive.png");
 
-function login() {
-  // const user = useContext(userContext);
+function login({ navigation }) {
+  const user = useContext(userContext);
   const setCurrentUser = useContext(setUserContext);
+
   const [loginState, dispatchLogin] = useReducer(loginReducer, initialLogin);
-  const { phone, password, isLoading, isError, error } = loginState;
+  const { username, password, isLoading, isError, error } = loginState;
 
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [keyboardActive, setKeyboardActive] = useState(false);
@@ -76,7 +77,10 @@ function login() {
   const handleSubmit = () => {
     dispatchLogin({ type: "login" });
     axios
-      .post(`${env.manifest.extra.proxy}/api/auth/signin`, { phone, password })
+      .post(`${env.manifest.extra.proxy}/api/auth/signin`, {
+        username,
+        password,
+      })
       .then((res) => {
         dispatchLogin({ type: "success" });
         storeToken(res.data.token);
@@ -85,15 +89,19 @@ function login() {
           setCurrentUser({
             isAuthenticated: true,
             isVerified: true,
-            user: res.data,
+            user: res.data.user,
           });
         } else {
           setCurrentUser({
             isAuthenticated: true,
             isVerified: false,
-            user: res.data,
+            user: res.data.user,
           });
+          navigation.navigate("Verify");
         }
+      })
+      .then(() => {
+        console.log(user);
       })
       .catch((err) => {
         dispatchLogin({ type: "error", message: "invalid credential" });
@@ -159,16 +167,16 @@ function login() {
           <Image source={require("../../assets/auth/userIco.png")} style={{}} />
           <TextInput
             style={styles.textInput}
-            placeholder="Your Phone Number"
-            value={phone}
+            placeholder="Phone or Email"
+            value={username}
             onFocus={() => {
               dispatchLogin({ type: "removeError" });
             }}
-            onChangeText={(phone) => {
+            onChangeText={(username) => {
               dispatchLogin({
                 type: "field",
-                field: "phone",
-                value: phone,
+                field: "username",
+                value: username,
               });
             }}
           />
@@ -206,7 +214,11 @@ function login() {
             <Image source={passwordVisible ? passIcoActive : passIco} />
           </TouchableOpacity>
         </View>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("Reset");
+          }}
+        >
           <Text
             style={{ fontSize: 12, color: "#A5A5A5", alignSelf: "flex-end" }}
           >
@@ -217,7 +229,7 @@ function login() {
           style={styles.buttonOut}
           onPress={handleSubmit}
           title={isLoading ? "Loading" : "Sign In "}
-          disabled={isLoading || password.length === 0 || phone.length === 0}
+          disabled={isLoading || password.length === 0 || username.length === 0}
         >
           <Text style={styles.buttonOutText}>Sign In </Text>
         </TouchableOpacity>

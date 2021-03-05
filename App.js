@@ -37,12 +37,13 @@ function App() {
     try {
       let token = await localStorage.getItem("jwtToken");
       if (token !== null) {
-        let id = jwtDecode(token).phone;
+        let id = jwtDecode(token).username;
         // TODO :: server side token validation
         try {
           await axios
             .get(`${Constants.manifest.extra.proxy}/api/get-user-data/${id}`)
             .then((res) => {
+              console.log(res.data);
               setTokenHeader(token);
               if (res.data.verified) {
                 setCurrentUser({
@@ -68,7 +69,7 @@ function App() {
   };
 
   useEffect(() => {
-    // localStorage.clear();
+    localStorage.clear();
     bootstrapAsync();
   }, []);
 
@@ -84,12 +85,18 @@ function App() {
               translucent={true}
               backgroundColor="transparent"
             />
-            {!user.isAuthenticated ? (
+            {/* {!user.isAuthenticated ? (
               <AuthStack />
             ) : !user.isVerified ? (
               <VerifyStack />
             ) : (
               <MainStack />
+            )} */}
+            {/* {!user.isAuthenticated ? <AuthStack /> : <MainStack />} */}
+            {user.isAuthenticated && user.isVerified ? (
+              <MainStack />
+            ) : (
+              <AuthStack />
             )}
           </NavigationContainer>
         </setUserContext.Provider>

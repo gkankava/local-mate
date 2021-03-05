@@ -18,18 +18,19 @@ import axios from "axios";
 import { userContext, setUserContext } from "../../store/contextApi";
 import { setTokenHeader } from "../../store/tokenHeader";
 import { initialSignUp, signUpReducer } from "../../store/user/user";
-import { useFocusEffect } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
 import Notify from "../../handlers/errorMessage";
 
 function signUpScreen({ navigation }) {
+  // const nav = useNavigation();
   const setCurrentUser = useContext(setUserContext);
   const [signUpState, dispatchSignUp] = useReducer(
     signUpReducer,
     initialSignUp
   );
   const {
-    phone,
+    username,
     password,
     rePassword,
     isLoading,
@@ -37,9 +38,9 @@ function signUpScreen({ navigation }) {
     error,
   } = signUpState;
 
-  const [passwordVisible, setPasswordVisible] = useState(false);
   const [keyboardActive, setKeyboardActive] = useState(false);
 
+  const [passwordVisible, setPasswordVisible] = useState(false);
   const passIco = require("../../assets/auth/seeIco.png");
   const passIcoActive = require("../../assets/auth/seeIcoActive.png");
 
@@ -87,7 +88,7 @@ function signUpScreen({ navigation }) {
 
       axios
         .post(`${env.manifest.extra.proxy}/api/auth/signup`, {
-          phone,
+          username,
           password,
         })
         .then((res) => {
@@ -98,18 +99,22 @@ function signUpScreen({ navigation }) {
             isAuthenticated: true,
             user: res.data,
           });
+          // nav.navigate("Verify");
+          navigation.navigate("Verify");
         })
         .catch((err) => {
           console.log(err);
           dispatchSignUp({
             type: "error",
-            message: "this phone is already registered",
+            message: "this phone or email is already registered",
           });
         });
+
+      //change error message
     } else if (password === rePassword) {
       dispatchSignUp({
         type: "error",
-        message: "password must be at least 8 characters long",
+        message: "password must be at least 6 characters long",
       });
     } else {
       dispatchSignUp({ type: "error", message: "passwords do not match" });
@@ -200,16 +205,16 @@ function signUpScreen({ navigation }) {
           <Image source={require("../../assets/auth/userIco.png")} style={{}} />
           <TextInput
             style={styles.textInput}
-            placeholder="Phone"
-            value={phone}
+            placeholder="Email or Phone"
+            value={username}
             onFocus={() => {
               dispatchSignUp({ type: "removeError" });
             }}
-            onChangeText={(phone) =>
+            onChangeText={(username) =>
               dispatchSignUp({
                 type: "field",
-                field: "phone",
-                value: phone,
+                field: "username",
+                value: username,
               })
             }
           />
@@ -270,7 +275,7 @@ function signUpScreen({ navigation }) {
             isLoading ||
             password.length === 0 ||
             rePassword.length === 0 ||
-            phone.length === 0
+            username.length === 0
           }
         >
           <Text style={styles.buttonOutText}>Continue </Text>

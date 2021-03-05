@@ -11,8 +11,6 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 
 function authPage({ navigation }) {
-  const height = Dimensions.get("window").height;
-  const width = Dimensions.get("window").width;
   return (
     <View style={{ flex: 1 }}>
       <View style={styles.topContainer}>

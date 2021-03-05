@@ -6,6 +6,7 @@ const Stack = createStackNavigator();
 import authScreen from "../components/auth/authScreen";
 import loginScreen from "../components/auth/loginScreen";
 import signUpScreen from "../components/auth/signUpScreen";
+import verifyScreen from "../components/auth/verifyScreen";
 import resetScreen from "../components/auth/resetPasswordScreen";
 
 function auth() {
@@ -25,6 +26,11 @@ function auth() {
         <Stack.Screen
           name="Register"
           component={signUpScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Verify"
+          component={verifyScreen}
           options={{ headerShown: false }}
         />
         <Stack.Screen

@@ -27,7 +27,7 @@ function verifyScreen() {
   const [data, setData] = useState();
 
   const verification = async () => {
-    console.log(username + "verifying");
+    console.log(username);
     let channel = username.includes("@") ? "email" : "sms";
     try {
       await axios
