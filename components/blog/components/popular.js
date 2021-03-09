@@ -1,46 +1,54 @@
 import React from "react";
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, TouchableOpacity } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 
-const popular = ({ data }) => {
+const popular = ({ data, navigation }) => {
   const [list, setList] = React.useState();
   React.useEffect(() => {
     if (data.list) {
+      // console.log(data.list);
       setList(
         data.list.map((item, key) => (
-          <View
+          <TouchableOpacity
             key={key}
-            style={{
-              width: "100%",
-              height: 86,
-              marginBottom: 5,
-              flexDirection: "row",
-              alignItems: "center",
+            activeOpacity={0.8}
+            onPress={() => {
+              navigation.navigate("PostScreen", { postID: item._id });
             }}
           >
-            <Image
+            <View
               style={{
-                height: 70,
-                width: 70,
-                borderRadius: 15,
-                marginRight: 10,
+                width: "100%",
+                height: 86,
+                marginBottom: 5,
+                flexDirection: "row",
+                alignItems: "center",
               }}
-              source={{ uri: item.postImage }}
-            />
-            <View style={{}}>
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <AntDesign name="user" size={12} color="#85C8D5" />
-                <Text style={{ color: "#85C8D5", fontSize: 12 }}>
-                  {item.status}
+            >
+              <Image
+                style={{
+                  height: 70,
+                  width: 70,
+                  borderRadius: 15,
+                  marginRight: 10,
+                }}
+                source={{ uri: item.postImage }}
+              />
+              <View style={{}}>
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <AntDesign name="user" size={12} color="#85C8D5" />
+                  <Text style={{ color: "#85C8D5", fontSize: 12 }}>
+                    {item.status}
+                  </Text>
+                </View>
+                <Text
+                  style={{ color: "black", fontSize: 16, fontWeight: "bold" }}
+                >
+                  {item.postName}
                 </Text>
               </View>
-              <Text
-                style={{ color: "black", fontSize: 16, fontWeight: "bold" }}
-              >
-                {item.postName}
-              </Text>
             </View>
-          </View>
+          </TouchableOpacity>
         ))
       );
     }

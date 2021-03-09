@@ -449,7 +449,7 @@ function authPage({ navigation }) {
                 alignSelf: "center",
                 marginTop: 30,
               }}
-              // onPress={() => navigation.navigate("Login")}
+              onPress={() => verification(username)}
             >
               <Text style={{ fontSize: 12, color: "#A5A5A5" }}>Resend </Text>
               <Text style={{ color: "#85C8D5", fontSize: 12 }}>Code</Text>

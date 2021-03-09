@@ -10,6 +10,7 @@ import Header from "../shared/header";
 import TabNavigation from "../shared/btn-component/botTabNavigator";
 
 import Search from "./components/search";
+import Result from "./components/Result";
 import Categories from "./components/categories";
 import CategoriesPosts from "./components/categoriesPosts";
 import Popular from "./components/popular";
@@ -23,6 +24,7 @@ function blogScreen({ navigation }) {
   const [selectedCategory, selectCategory] = useState();
   const [fetchedPosts, setFetchedPosts] = useState([]);
   const [dummy, setDummy] = useState([]);
+  const [focused, setFocused] = useState(false);
 
   //fetch categories
   useEffect(() => {
@@ -59,42 +61,53 @@ function blogScreen({ navigation }) {
       .catch((err) => console.log(err));
   }, []);
 
+  const [list, setList] = useState([]);
+
   const renderContent = () => (
     <>
-      <Search />
-      {categories.length > 0 && selectedCategory ? (
-        <Categories
-          categories={categories}
-          selectedCategory={selectedCategory}
-          selectCategory={selectCategory}
-          setFetchedPosts={setFetchedPosts}
-        />
+      <Search focused={setFocused} setList={setList} />
+      {focused ? (
+        <Result list={list} />
       ) : (
-        <View style={styles.categoryTabContainer}>
-          <DotIndicator color="#85C8D5" size={5} />
-        </View>
-      )}
+        <>
+          {categories.length > 0 && selectedCategory ? (
+            <Categories
+              categories={categories}
+              selectedCategory={selectedCategory}
+              selectCategory={selectCategory}
+              setFetchedPosts={setFetchedPosts}
+            />
+          ) : (
+            <View style={styles.categoryTabContainer}>
+              <DotIndicator color="#85C8D5" size={5} />
+            </View>
+          )}
 
-      {fetchedPosts.length > 0 ? (
-        <CategoriesPosts fetchedPosts={fetchedPosts} navigation={navigation} />
-      ) : (
-        <View style={styles.catPostsContainer}>
-          <DotIndicator color="#85C8D5" size={7} />
-        </View>
-      )}
-      {dummy ? (
-        <Popular data={dummy} />
-      ) : (
-        <View style={styles.catPostsContainer}>
-          <DotIndicator color="#85C8D5" size={7} />
-        </View>
-      )}
-      {dummy ? (
-        <Recents data={dummy} />
-      ) : (
-        <View style={styles.catPostsContainer}>
-          <DotIndicator color="#85C8D5" size={7} />
-        </View>
+          {fetchedPosts.length > 0 ? (
+            <CategoriesPosts
+              fetchedPosts={fetchedPosts}
+              navigation={navigation}
+            />
+          ) : (
+            <View style={styles.catPostsContainer}>
+              <DotIndicator color="#85C8D5" size={7} />
+            </View>
+          )}
+          {dummy ? (
+            <Popular data={dummy} navigation={navigation} />
+          ) : (
+            <View style={styles.catPostsContainer}>
+              <DotIndicator color="#85C8D5" size={7} />
+            </View>
+          )}
+          {dummy ? (
+            <Recents data={dummy} navigation={navigation} />
+          ) : (
+            <View style={styles.catPostsContainer}>
+              <DotIndicator color="#85C8D5" size={7} />
+            </View>
+          )}
+        </>
       )}
     </>
   );

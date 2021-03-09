@@ -1,9 +1,7 @@
 import React, { useContext, useState } from "react";
 import { Dimensions, View, Platform, Text } from "react-native";
 
-import HeaderImageScrollView, {
-  TriggeringView,
-} from "react-native-image-header-scroll-view";
+import HeaderImageScrollView from "react-native-image-header-scroll-view";
 import env from "expo-constants";
 import { userContext } from "../../store/contextApi";
 
@@ -25,14 +23,12 @@ const header = (props) => {
   return (
     <>
       <HeaderImageScrollView
-        // style={{ backgroundColor: "white", borderTopRightRadius: 50 }}
         onScroll={(e) => setScrollY(e.nativeEvent.contentOffset.y)}
         maxHeight={height * 0.4}
         minHeight={height * 0.18}
         headerImage={image}
         maxOverlayOpacity={0.5}
         minOverlayOpacity={0.1}
-        // renderHeader={() => <Image source={image} />}
         renderForeground={() => (
           <>
             <Forground
@@ -65,9 +61,8 @@ const header = (props) => {
       >
         <View
           style={{
-            height: 1000,
+            // height: 1000,
             top: Platform.OS === "ios" ? -50 : 0,
-            // top: -50,
             borderTopRightRadius: 50,
             backgroundColor: "white",
             paddingBottom: 100,

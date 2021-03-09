@@ -88,7 +88,7 @@ function signUpScreen({ navigation }) {
 
       axios
         .post(`${env.manifest.extra.proxy}/api/auth/signup`, {
-          username,
+          username: username.toLowerCase(),
           password,
         })
         .then((res) => {

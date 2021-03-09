@@ -67,10 +67,18 @@ const camera = ({ status, setStatus, setMedia, send }) => {
         setCamPrev(true);
         setImagePrev(null);
       }}
+      statusBarTranslucent={true}
     >
-      {status && <StatusBar backgroundColor="rgba(0,0,0, 1)" />}
+      {/* {status && <StatusBar backgroundColor="rgba(0,0,0, 1)" />} */}
       {camPrev ? (
-        <Camera style={styles.camera} type={type} ref={cameraRef}>
+        <Camera
+          style={styles.camera}
+          type={type}
+          ref={cameraRef}
+          onCameraReady={() => {
+            console.log("ready");
+          }}
+        >
           <View style={styles.buttonContainer}>
             <TouchableOpacity
               style={styles.closeButton}

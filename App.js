@@ -43,7 +43,6 @@ function App() {
           await axios
             .get(`${Constants.manifest.extra.proxy}/api/get-user-data/${id}`)
             .then((res) => {
-              console.log(res.data);
               setTokenHeader(token);
               if (res.data.verified) {
                 setCurrentUser({
@@ -69,7 +68,7 @@ function App() {
   };
 
   useEffect(() => {
-    localStorage.clear();
+    // localStorage.clear();
     bootstrapAsync();
   }, []);
 
@@ -85,14 +84,6 @@ function App() {
               translucent={true}
               backgroundColor="transparent"
             />
-            {/* {!user.isAuthenticated ? (
-              <AuthStack />
-            ) : !user.isVerified ? (
-              <VerifyStack />
-            ) : (
-              <MainStack />
-            )} */}
-            {/* {!user.isAuthenticated ? <AuthStack /> : <MainStack />} */}
             {user.isAuthenticated && user.isVerified ? (
               <MainStack />
             ) : (

@@ -15,7 +15,7 @@ import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { Entypo } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 
-const message = ({
+const Message = ({
   message: { user, text },
   name,
   pP,
@@ -43,13 +43,25 @@ const message = ({
   let isSentByUser = false;
   let fullUrl;
 
+  React.useEffect(() => {
+    if (type === "audio") {
+      const getAudio = async () => {
+        const sound = new Audio.Sound();
+        await sound.loadAsync({ uri: soundUri }).then((res) => {
+          setDuration(res.durationMillis);
+        });
+      };
+      if (!duration) {
+        getAudio();
+      }
+    }
+  }, [type]);
+
   async function playSound() {
     const { sound } = await Audio.Sound.createAsync({ uri: soundUri });
     setSound(sound);
     setIsPlaying(true);
     await sound.playAsync().then((res) => {
-      setDuration(res.durationMillis);
-      // playSoundAnim();
       setTimeout(() => {
         setIsPlaying(false);
       }, res.durationMillis);
@@ -398,7 +410,7 @@ const message = ({
   );
 };
 
-export default message;
+export default Message;
 
 {
   /* <View

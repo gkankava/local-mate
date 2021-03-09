@@ -14,9 +14,15 @@ import env from "expo-constants";
 import io from "socket.io-client";
 import axios from "axios";
 import { userContext } from "../../store/contextApi";
+import { useFocusEffect } from "@react-navigation/native";
+
+import ChatHeader from "./chatHeader";
+
 import { Stopwatch } from "react-native-stopwatch-timer";
 
 import Messages from "./messages";
+
+import { fetchChat } from "../../handlers/fetchChat";
 
 import * as ImagePicker from "expo-image-picker";
 import Camera from "./camera";
@@ -24,6 +30,11 @@ import { Audio } from "expo-av";
 
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Header from "../shared/header";
+
+import {
+  addKeyboardListener,
+  removeKeyboardListener,
+} from "../../handlers/keyboardDetect";
 
 const ENDPOINT = env.manifest.extra.proxy;
 let socket;
@@ -84,6 +95,31 @@ function chatScreen() {
       socket.off();
     };
   }, []);
+
+  //Keyboard avoiding View
+
+  const [keyboardActive, setKeyboardActive] = useState(false);
+  const [keyBoardHeight, setKeyboardHeight] = useState(0);
+
+  const _keyboardDidShow = (e) => {
+    setKeyboardActive(true);
+    setKeyboardHeight(e.endCoordinates.height);
+    scrollViewRef.current.scrollToEnd({ animated: false });
+  };
+
+  const _keyboardDidHide = () => {
+    setKeyboardActive(false);
+    setKeyboardHeight(0);
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      addKeyboardListener(_keyboardDidShow, _keyboardDidHide);
+      return () => {
+        removeKeyboardListener(_keyboardDidShow, _keyboardDidHide);
+      };
+    }, [])
+  );
 
   //socket -----
 
@@ -200,7 +236,34 @@ function chatScreen() {
     const sound = new Audio.Sound();
   }
 
-  // animations
+  // fetch && sort && unshift
+
+  const [isFetching, setIsFetching] = useState(false);
+
+  useEffect(() => {
+    fetchChat();
+  }, []);
+
+  const fetchChat = () => {
+    setIsFetching(true);
+    axios
+      .get(`${ENDPOINT}/api/chat/${user.user.username}`)
+      .then((res) => {
+        setIsFetching(false);
+        // add to messages
+        // console.log(res.data);
+        setMessages([...res.data]);
+      })
+      .catch((err) => {
+        setIsFetching(false);
+      });
+  };
+
+  useEffect(() => {
+    scrollViewRef.current.scrollToEnd({ animated: false });
+  }, [messages]);
+
+  // Animations
 
   const onAirAnimation = () => {
     Animated.loop(
@@ -243,16 +306,19 @@ function chatScreen() {
 
   return (
     <>
-      <Header />
+      <ChatHeader
+        username={user.user.username}
+        pP={ENDPOINT + user.user.profilePicture}
+      />
       <ScrollView
         style={styles.chatArea}
         ref={scrollViewRef}
         onContentSizeChange={
           scrollViewRef.current
-            ? scrollViewRef.current.scrollToEnd({ animated: true })
+            ? scrollViewRef.current.scrollToEnd({ animated: false })
             : null
         }
-        contentContainerStyle={{ paddingBottom: 15 }}
+        contentContainerStyle={{ paddingBottom: 25, paddingTop: 25 }}
       >
         <Messages
           messagelist={messages}
@@ -260,7 +326,8 @@ function chatScreen() {
           pP={ENDPOINT + user.user.profilePicture}
         />
       </ScrollView>
-      <View style={styles.inputArea}>
+
+      <View style={{ ...styles.inputArea, marginBottom: keyBoardHeight }}>
         <View style={styles.inputTop}>
           {isRecording ? (
             <View
@@ -405,7 +472,6 @@ function chatScreen() {
 
 const styles = StyleSheet.create({
   chatArea: {
-    flex: 1,
     padding: 15,
     backgroundColor: "white",
   },

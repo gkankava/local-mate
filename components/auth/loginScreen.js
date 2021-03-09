@@ -78,7 +78,7 @@ function login({ navigation }) {
     dispatchLogin({ type: "login" });
     axios
       .post(`${env.manifest.extra.proxy}/api/auth/signin`, {
-        username,
+        username: username.toLowerCase(),
         password,
       })
       .then((res) => {

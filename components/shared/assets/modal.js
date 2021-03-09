@@ -4,10 +4,8 @@ import { useNavigation } from "@react-navigation/native";
 
 const height = Dimensions.get("screen").height;
 
-const modal = ({ vis, setVis }) => {
-  React.useEffect(() => {
-    console.log(vis);
-  }, []);
+const modal = ({ vis, setVis, profileStack }) => {
+  React.useEffect(() => {}, []);
   const nav = useNavigation();
 
   return (
@@ -24,7 +22,7 @@ const modal = ({ vis, setVis }) => {
           onStartShouldSetResponder={() => {
             setVis(false);
           }}
-          style={{ flex: 1 }}
+          style={{ flex: 1, backgroundColor: "rgba(0,0,0,0)" }}
         >
           <View style={styles.modalView}>
             <Text style={{ fontSize: 14, color: "#85C8D5", marginBottom: 16 }}>
@@ -34,7 +32,11 @@ const modal = ({ vis, setVis }) => {
               style={{ fontSize: 14, marginBottom: 16 }}
               onPress={() => {
                 setVis(false);
-                nav.navigate("Profile", { screen: "SettingsBilling" });
+                {
+                  profileStack
+                    ? nav.navigate("SettingsBilling")
+                    : nav.navigate("Profile", { screen: "SettingsBilling" });
+                }
               }}
             >
               Billing
@@ -43,7 +45,11 @@ const modal = ({ vis, setVis }) => {
               style={{ fontSize: 14, marginBottom: 16 }}
               onPress={() => {
                 setVis(false);
-                nav.navigate("Profile", { screen: "SettingsProfile" });
+                {
+                  profileStack
+                    ? nav.navigate("SettingsProfile")
+                    : nav.navigate("Profile", { screen: "SettingsProfile" });
+                }
               }}
             >
               Profile
@@ -52,7 +58,11 @@ const modal = ({ vis, setVis }) => {
               style={{ fontSize: 14, marginBottom: 16 }}
               onPress={() => {
                 setVis(false);
-                nav.navigate("Profile", { screen: "Settings" });
+                {
+                  profileStack
+                    ? nav.navigate("Settings")
+                    : nav.navigate("Profile", { screen: "Settings" });
+                }
               }}
             >
               Settings

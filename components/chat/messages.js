@@ -46,9 +46,10 @@ const messages = ({ messagelist, name, pP, urgent }) => {
           <TouchableOpacity
             style={{
               position: "absolute",
-              top: 20,
+              top: 50,
               left: 20,
               zIndex: 99,
+              backgroundColor: "rgba(0,0,0, .9)",
             }}
             onPress={() => setImgModal({ state: false, img: "" })}
           >
@@ -57,11 +58,6 @@ const messages = ({ messagelist, name, pP, urgent }) => {
           <Image
             source={{ uri: imgModal.img }}
             style={{
-              //   position: "absolute",
-              //   top: 0,
-              //   left: 0,
-              //   width: 300,
-              //   height: 300,
               zIndex: -100,
               resizeMode: "contain",
               height: "100%",
