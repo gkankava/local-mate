@@ -30,7 +30,7 @@
       "favicon": "./assets/favicon.png"
     },
     "extra": {
-      "proxy": "http://192.168.0.102:8080"
+      "proxy": "http://134.209.239.1"
     },
     "description": ""
   }

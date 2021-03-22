@@ -1,12 +1,15 @@
 import React from "react";
 import { View, Text } from "react-native";
+import Content from "./shared/Content";
+import Header from "./shared/header";
 
-function billingScreen({ navigation }) {
+const BillingScreen = () => {
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text>billing screen </Text>
-    </View>
+    <>
+      <Header header={"Billing"} />
+      <Content></Content>
+    </>
   );
-}
+};
 
-export default billingScreen;
+export default BillingScreen;

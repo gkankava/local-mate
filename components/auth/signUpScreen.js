@@ -9,6 +9,7 @@ import {
   Platform,
   TouchableOpacity,
   Keyboard,
+  ScrollView,
 } from "react-native";
 import env from "expo-constants";
 
@@ -85,11 +86,13 @@ function signUpScreen({ navigation }) {
   const handleSubmit = () => {
     if (password === rePassword && password.length > 6) {
       dispatchSignUp({ type: "signUp" });
-
       axios
         .post(`${env.manifest.extra.proxy}/api/auth/signup`, {
           username: username.toLowerCase(),
           password,
+          email: username.includes("@") ? username : "",
+          phone:
+            username.includes("+") && !username.includes("@") ? username : "",
         })
         .then((res) => {
           dispatchSignUp({ type: "success" });
@@ -164,131 +167,139 @@ function signUpScreen({ navigation }) {
           height: keyboardActive ? "85%" : "60%",
         }}
       >
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-          }}
-        >
-          <Text
+        <ScrollView>
+          <View
             style={{
-              fontSize: 30,
-              fontWeight: "200",
-              color: "#85C8D5",
-              marginBottom: 50,
+              flexDirection: "row",
+              justifyContent: "space-between",
             }}
           >
-            Join Us
-          </Text>
-          <View style={{ marginTop: 20, flexDirection: "row" }}>
-            <View
+            <Text
               style={{
-                height: 6,
-                width: 28,
-                backgroundColor: "#85C8D5",
-                borderRadius: 3,
+                fontSize: 30,
+                fontWeight: "200",
+                color: "#85C8D5",
+                marginBottom: 50,
               }}
+            >
+              Join Us
+            </Text>
+            <View style={{ marginTop: 20, flexDirection: "row" }}>
+              <View
+                style={{
+                  height: 6,
+                  width: 28,
+                  backgroundColor: "#85C8D5",
+                  borderRadius: 3,
+                }}
+              />
+              <View
+                style={{
+                  height: 6,
+                  width: 6,
+                  backgroundColor: "#E5E5E5",
+                  borderRadius: 3,
+                  marginLeft: 5,
+                }}
+              />
+            </View>
+          </View>
+          {isError ? <Notify message={error} /> : null}
+          <View style={styles.inputContainer}>
+            <Image
+              source={require("../../assets/auth/userIco.png")}
+              style={{}}
             />
-            <View
-              style={{
-                height: 6,
-                width: 6,
-                backgroundColor: "#E5E5E5",
-                borderRadius: 3,
-                marginLeft: 5,
+            <TextInput
+              style={styles.textInput}
+              placeholder="Email or Phone"
+              value={username}
+              onFocus={() => {
+                dispatchSignUp({ type: "removeError" });
               }}
+              onChangeText={(username) =>
+                dispatchSignUp({
+                  type: "field",
+                  field: "username",
+                  value: username,
+                })
+              }
             />
           </View>
-        </View>
-        {isError ? <Notify message={error} /> : null}
-        <View style={styles.inputContainer}>
-          <Image source={require("../../assets/auth/userIco.png")} style={{}} />
-          <TextInput
-            style={styles.textInput}
-            placeholder="Email or Phone"
-            value={username}
-            onFocus={() => {
-              dispatchSignUp({ type: "removeError" });
-            }}
-            onChangeText={(username) =>
-              dispatchSignUp({
-                type: "field",
-                field: "username",
-                value: username,
-              })
-            }
-          />
-        </View>
-        <View style={styles.bigInputContainer}>
-          <View style={styles.innerInputContainer}>
+          <View style={styles.bigInputContainer}>
+            <View style={styles.innerInputContainer}>
+              <Image
+                source={require("../../assets/auth/passIco.png")}
+                style={{}}
+              />
+              <TextInput
+                style={styles.passInput}
+                secureTextEntry={!passwordVisible}
+                placeholder="Password"
+                value={password}
+                onFocus={() => {
+                  dispatchSignUp({ type: "removeError" });
+                }}
+                onChangeText={(password) =>
+                  dispatchSignUp({
+                    type: "field",
+                    field: "password",
+                    value: password,
+                  })
+                }
+              />
+            </View>
+            <TouchableOpacity
+              style={{ marginLeft: -40, marginTop: 13, zIndex: 99 }}
+              onPress={() => {
+                setPasswordVisible(!passwordVisible);
+              }}
+            >
+              <Image source={passwordVisible ? passIcoActive : passIco} />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.inputContainer}>
             <Image
               source={require("../../assets/auth/passIco.png")}
               style={{}}
             />
             <TextInput
-              style={styles.passInput}
-              secureTextEntry={!passwordVisible}
-              placeholder="Password"
-              value={password}
-              onFocus={() => {
-                dispatchSignUp({ type: "removeError" });
-              }}
-              onChangeText={(password) =>
+              style={styles.textInput}
+              secureTextEntry={true}
+              placeholder="Repeat Password"
+              value={rePassword}
+              onChangeText={(rePassword) =>
                 dispatchSignUp({
                   type: "field",
-                  field: "password",
-                  value: password,
+                  field: "rePassword",
+                  value: rePassword,
                 })
               }
             />
           </View>
           <TouchableOpacity
-            style={{ marginLeft: -40, marginTop: 13, zIndex: 99 }}
-            onPress={() => {
-              setPasswordVisible(!passwordVisible);
-            }}
-          >
-            <Image source={passwordVisible ? passIcoActive : passIco} />
-          </TouchableOpacity>
-        </View>
-        <View style={styles.inputContainer}>
-          <Image source={require("../../assets/auth/passIco.png")} style={{}} />
-          <TextInput
-            style={styles.textInput}
-            secureTextEntry={true}
-            placeholder="Repeat Password"
-            value={rePassword}
-            onChangeText={(rePassword) =>
-              dispatchSignUp({
-                type: "field",
-                field: "rePassword",
-                value: rePassword,
-              })
+            style={styles.buttonOut}
+            onPress={handleSubmit}
+            title={isLoading ? "Loading" : "Sign Up "}
+            disabled={
+              isLoading ||
+              password.length === 0 ||
+              rePassword.length === 0 ||
+              username.length === 0
             }
-          />
-        </View>
-        <TouchableOpacity
-          style={styles.buttonOut}
-          onPress={handleSubmit}
-          title={isLoading ? "Loading" : "Sign Up "}
-          disabled={
-            isLoading ||
-            password.length === 0 ||
-            rePassword.length === 0 ||
-            username.length === 0
-          }
-        >
-          <Text style={styles.buttonOutText}>Continue </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{ flexDirection: "row", alignSelf: "center", marginTop: 30 }}
-          onPress={() => navigation.navigate("Login")}
-        >
-          <Text style={{ fontSize: 12, color: "#A5A5A5" }}>
-            Already a member?{" "}
-          </Text>
-          <Text style={{ color: "#85C8D5" }}>Sign In </Text>
-        </TouchableOpacity>
+          >
+            <Text style={styles.buttonOutText}>Continue </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{ flexDirection: "row", alignSelf: "center", marginTop: 30 }}
+            onPress={() => navigation.navigate("Login")}
+          >
+            <Text style={{ fontSize: 12, color: "#A5A5A5" }}>
+              Already a member?{" "}
+            </Text>
+            <Text style={{ color: "#85C8D5" }}>Sign In </Text>
+          </TouchableOpacity>
+        </ScrollView>
       </View>
     </View>
   );

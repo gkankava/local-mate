@@ -32,10 +32,7 @@ const postScreen = (props) => {
   let thumb = [];
 
   if (fetchedPost) {
-    data = fetchedPost.gallery.map((item, key) => ({
-      id: key,
-      image: { uri: item },
-    }));
+    data = fetchedPost.gallery.map((item, key) => ({ source: { uri: item } }));
     if (fetchedPost.gallery.length > 4) {
       for (let i = 0; i < 4; i++) {
         thumb.push(fetchedPost.gallery[i]);

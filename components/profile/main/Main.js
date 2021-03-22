@@ -6,17 +6,29 @@ import {
   StyleSheet,
   TouchableOpacity,
   Dimensions,
+  Share,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import * as Sharing from "expo-sharing";
 
 const width = Dimensions.get("screen").width * 0.85;
 
 const Main = () => {
   const nav = useNavigation();
+
+  const shareAsync = async () => {
+    try {
+      const result = await Share.share({
+        message: "Local Mate | Url for App Store / Play Store",
+      });
+    } catch (error) {
+      alert(error.message);
+    }
+  };
 
   return (
     <ScrollView
@@ -67,7 +79,8 @@ const Main = () => {
 
       <TouchableOpacity
         style={styles.item}
-        onPress={() => nav.navigate("Share")}
+        onPress={() => shareAsync()}
+        //open modal
       >
         <View style={styles.innerWrapper}>
           <View style={{ ...styles.iconWrapper, backgroundColor: "#636382" }}>

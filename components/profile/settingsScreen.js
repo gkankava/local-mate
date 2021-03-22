@@ -1,12 +1,15 @@
 import React from "react";
 import { View, Text } from "react-native";
+import Content from "./shared/Content";
+import Header from "./shared/header";
 
-function settingsScreen({ navigation }) {
+const SettingsScreen = () => {
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text>settings screen </Text>
-    </View>
+    <>
+      <Header header={"Settings"} />
+      <Content></Content>
+    </>
   );
-}
+};
 
-export default settingsScreen;
+export default SettingsScreen;

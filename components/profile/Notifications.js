@@ -1,11 +1,14 @@
 import React from "react";
 import { View, Text } from "react-native";
+import Header from "./shared/header";
+import Content from "./shared/Content";
 
 const Notifications = () => {
   return (
-    <View>
-      <Text></Text>
-    </View>
+    <>
+      <Header header={"Notifications"} />
+      <Content></Content>
+    </>
   );
 };
 

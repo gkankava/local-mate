@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   Keyboard,
   Platform,
+  ScrollView,
 } from "react-native";
 import env from "expo-constants";
 
@@ -101,7 +102,7 @@ function login({ navigation }) {
         }
       })
       .then(() => {
-        console.log(user);
+        // console.log(user);
       })
       .catch((err) => {
         dispatchLogin({ type: "error", message: "invalid credential" });
@@ -150,89 +151,96 @@ function login({ navigation }) {
           height: keyboardActive ? "85%" : "60%",
         }}
       >
-        <Text
-          style={{
-            fontSize: 30,
-            fontWeight: "200",
-            color: "#85C8D5",
-            marginBottom: 50,
-          }}
-        >
-          Hello, Mate
-        </Text>
-
-        {isError ? <Notify message={error} /> : null}
-
-        <View style={styles.inputContainer}>
-          <Image source={require("../../assets/auth/userIco.png")} style={{}} />
-          <TextInput
-            style={styles.textInput}
-            placeholder="Phone or Email"
-            value={username}
-            onFocus={() => {
-              dispatchLogin({ type: "removeError" });
+        <ScrollView>
+          <Text
+            style={{
+              fontSize: 30,
+              fontWeight: "200",
+              color: "#85C8D5",
+              marginBottom: 50,
             }}
-            onChangeText={(username) => {
-              dispatchLogin({
-                type: "field",
-                field: "username",
-                value: username,
-              });
-            }}
-          />
-        </View>
-        <View style={styles.bigInputContainer}>
-          <View style={styles.innerInputContainer}>
+          >
+            Hello, Mate
+          </Text>
+
+          {isError ? <Notify message={error} /> : null}
+
+          <View style={styles.inputContainer}>
             <Image
-              source={require("../../assets/auth/passIco.png")}
+              source={require("../../assets/auth/userIco.png")}
               style={{}}
             />
             <TextInput
-              style={styles.passInput}
-              secureTextEntry={!passwordVisible}
-              placeholder="Password"
-              value={password}
+              style={styles.textInput}
+              placeholder="Phone or Email"
+              value={username}
               onFocus={() => {
                 dispatchLogin({ type: "removeError" });
               }}
-              onChangeText={(password) =>
+              onChangeText={(username) => {
                 dispatchLogin({
                   type: "field",
-                  field: "password",
-                  value: password,
-                })
-              }
-              inlineImageLeft="username"
+                  field: "username",
+                  value: username,
+                });
+              }}
             />
           </View>
+          <View style={styles.bigInputContainer}>
+            <View style={styles.innerInputContainer}>
+              <Image
+                source={require("../../assets/auth/passIco.png")}
+                style={{}}
+              />
+              <TextInput
+                style={styles.passInput}
+                secureTextEntry={!passwordVisible}
+                placeholder="Password"
+                value={password}
+                onFocus={() => {
+                  dispatchLogin({ type: "removeError" });
+                }}
+                onChangeText={(password) =>
+                  dispatchLogin({
+                    type: "field",
+                    field: "password",
+                    value: password,
+                  })
+                }
+                inlineImageLeft="username"
+              />
+            </View>
+            <TouchableOpacity
+              style={{ marginLeft: -40, marginTop: 13, zIndex: 99 }}
+              onPress={() => {
+                setPasswordVisible(!passwordVisible);
+              }}
+            >
+              <Image source={passwordVisible ? passIcoActive : passIco} />
+            </TouchableOpacity>
+          </View>
           <TouchableOpacity
-            style={{ marginLeft: -40, marginTop: 13, zIndex: 99 }}
             onPress={() => {
-              setPasswordVisible(!passwordVisible);
+              navigation.navigate("Reset");
             }}
           >
-            <Image source={passwordVisible ? passIcoActive : passIco} />
+            <Text
+              style={{ fontSize: 12, color: "#A5A5A5", alignSelf: "flex-end" }}
+            >
+              Forget Password?
+            </Text>
           </TouchableOpacity>
-        </View>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate("Reset");
-          }}
-        >
-          <Text
-            style={{ fontSize: 12, color: "#A5A5A5", alignSelf: "flex-end" }}
+          <TouchableOpacity
+            style={styles.buttonOut}
+            onPress={handleSubmit}
+            title={isLoading ? "Loading" : "Sign In "}
+            disabled={
+              isLoading || password.length === 0 || username.length === 0
+            }
           >
-            Forget Password?
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.buttonOut}
-          onPress={handleSubmit}
-          title={isLoading ? "Loading" : "Sign In "}
-          disabled={isLoading || password.length === 0 || username.length === 0}
-        >
-          <Text style={styles.buttonOutText}>Sign In </Text>
-        </TouchableOpacity>
+            <Text style={styles.buttonOutText}>Sign In </Text>
+          </TouchableOpacity>
+        </ScrollView>
       </View>
     </View>
   );
